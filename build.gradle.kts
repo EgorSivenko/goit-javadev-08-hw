@@ -1,5 +1,7 @@
 plugins {
     id("java")
+    id("org.flywaydb.flyway") version "8.3.0"
+    id("io.freefair.lombok") version "8.4"
 }
 
 group = "org.example"
@@ -7,6 +9,12 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+}
+
+buildscript {
+    dependencies {
+        classpath("org.flywaydb:flyway-mysql:8.3.0")
+    }
 }
 
 dependencies {
@@ -19,4 +27,10 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+flyway {
+    url = "jdbc:mysql://127.0.0.1:3306/mega_soft"
+    user = "root"
+    password = "strong_password"
 }

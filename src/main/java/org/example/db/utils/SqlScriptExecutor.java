@@ -37,21 +37,4 @@ public class SqlScriptExecutor {
         }
         return sqlStatements;
     }
-
-    public static void executeSqlStatements(List<String> sqlStatements, Connection connection) throws SQLException {
-        connection.setAutoCommit(false);
-
-        try (Statement statement = connection.createStatement()) {
-            for (String sql : sqlStatements) {
-                statement.addBatch(sql);
-            }
-            statement.executeBatch();
-
-            connection.commit();
-        } catch (SQLException e) {
-            connection.rollback();
-        } finally {
-            connection.setAutoCommit(true);
-        }
-    }
 }
