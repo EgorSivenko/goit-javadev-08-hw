@@ -24,5 +24,4 @@ public class Database {
     public static Database getInstance() {
         return database;
     }
-
 }

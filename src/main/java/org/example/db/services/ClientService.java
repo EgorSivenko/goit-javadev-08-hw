@@ -31,11 +31,12 @@ public class ClientService {
             throw new IllegalArgumentException("Client name is too short");
         }
 
-        ResultSet resultSet = createSt.getGeneratedKeys();
-        if (!resultSet.next()) {
-            return -1;
+        try (ResultSet resultSet = createSt.getGeneratedKeys()) {
+            if (!resultSet.next()) {
+                return -1;
+            }
+            return resultSet.getLong(1);
         }
-        return resultSet.getLong(1);
     }
 
     public String getById(long id) throws SQLException {
@@ -44,11 +45,12 @@ public class ClientService {
 
         getByIdSt.setLong(1, id);
 
-        ResultSet resultSet = getByIdSt.executeQuery();
-        if (!resultSet.next()) {
-            throw new IllegalStateException("Client with id " + id + " doesn't exist");
+        try (ResultSet resultSet = getByIdSt.executeQuery()) {
+            if (!resultSet.next()) {
+                throw new IllegalStateException("Client with id " + id + " doesn't exist");
+            }
+            return resultSet.getString("client_name");
         }
-        return resultSet.getString("client_name");
     }
 
     public boolean setName(long id, String name) throws SQLException {
@@ -83,13 +85,14 @@ public class ClientService {
 
     public List<Client> listAll() throws SQLException {
         List<Client> clients = new ArrayList<>();
-        ResultSet resultSet = listAllSt.executeQuery();
 
-        while (resultSet.next()) {
-            var client = new Client();
-            client.setClientId(resultSet.getLong("client_id"));
-            client.setClientName(resultSet.getString("client_name"));
-            clients.add(client);
+        try (ResultSet resultSet = listAllSt.executeQuery()) {
+            while (resultSet.next()) {
+                var client = new Client();
+                client.setClientId(resultSet.getLong("client_id"));
+                client.setClientName(resultSet.getString("client_name"));
+                clients.add(client);
+            }
         }
         return clients;
     }

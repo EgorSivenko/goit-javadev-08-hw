@@ -32,12 +32,13 @@ public class DatabaseQueryService {
 
         try (Statement statement = connection.createStatement()) {
             for (String sqlStatement : sqlStatements) {
-                ResultSet resultSet = statement.executeQuery(sqlStatement);
-                while (resultSet.next()) {
-                    MaxSalaryWorker maxSalaryWorker = new MaxSalaryWorker();
-                    maxSalaryWorker.setWorkerName(resultSet.getString("worker_name"));
-                    maxSalaryWorker.setSalary(resultSet.getInt("salary"));
-                    maxSalaryWorkers.add(maxSalaryWorker);
+                try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                    while (resultSet.next()) {
+                        MaxSalaryWorker maxSalaryWorker = new MaxSalaryWorker();
+                        maxSalaryWorker.setWorkerName(resultSet.getString("worker_name"));
+                        maxSalaryWorker.setSalary(resultSet.getInt("salary"));
+                        maxSalaryWorkers.add(maxSalaryWorker);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -52,12 +53,13 @@ public class DatabaseQueryService {
 
         try (Statement statement = connection.createStatement()) {
             for (String sqlStatement : sqlStatements) {
-                ResultSet resultSet = statement.executeQuery(sqlStatement);
-                while (resultSet.next()) {
-                    MaxProjectsClient maxProjectsClient = new MaxProjectsClient();
-                    maxProjectsClient.setClientName(resultSet.getString("client_name"));
-                    maxProjectsClient.setProjectCount(resultSet.getInt("project_count"));
-                    maxProjectsClients.add(maxProjectsClient);
+                try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                    while (resultSet.next()) {
+                        MaxProjectsClient maxProjectsClient = new MaxProjectsClient();
+                        maxProjectsClient.setClientName(resultSet.getString("client_name"));
+                        maxProjectsClient.setProjectCount(resultSet.getInt("project_count"));
+                        maxProjectsClients.add(maxProjectsClient);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -72,12 +74,13 @@ public class DatabaseQueryService {
 
         try (Statement statement = connection.createStatement()) {
             for (String sqlStatement : sqlStatements) {
-                ResultSet resultSet = statement.executeQuery(sqlStatement);
-                while (resultSet.next()) {
-                    LongestProject longestProject = new LongestProject();
-                    longestProject.setProjectId(resultSet.getLong("project_id"));
-                    longestProject.setMonthCount(resultSet.getInt("month_count"));
-                    longestProjects.add(longestProject);
+                try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                    while (resultSet.next()) {
+                        LongestProject longestProject = new LongestProject();
+                        longestProject.setProjectId(resultSet.getLong("project_id"));
+                        longestProject.setMonthCount(resultSet.getInt("month_count"));
+                        longestProjects.add(longestProject);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -92,13 +95,14 @@ public class DatabaseQueryService {
 
         try (Statement statement = connection.createStatement()) {
             for (String sqlStatement : sqlStatements) {
-                ResultSet resultSet = statement.executeQuery(sqlStatement);
-                while (resultSet.next()) {
-                    YoungestEldestWorker youngestEldestWorker = new YoungestEldestWorker();
-                    youngestEldestWorker.setType(resultSet.getString("type"));
-                    youngestEldestWorker.setWorkerName(resultSet.getString("worker_name"));
-                    youngestEldestWorker.setBirthday(resultSet.getDate("birthday").toLocalDate());
-                    youngestEldestWorkers.add(youngestEldestWorker);
+                try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                    while (resultSet.next()) {
+                        YoungestEldestWorker youngestEldestWorker = new YoungestEldestWorker();
+                        youngestEldestWorker.setType(resultSet.getString("type"));
+                        youngestEldestWorker.setWorkerName(resultSet.getString("worker_name"));
+                        youngestEldestWorker.setBirthday(resultSet.getDate("birthday").toLocalDate());
+                        youngestEldestWorkers.add(youngestEldestWorker);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -113,12 +117,13 @@ public class DatabaseQueryService {
 
         try (Statement statement = connection.createStatement()) {
             for (String sqlStatement : sqlStatements) {
-                ResultSet resultSet = statement.executeQuery(sqlStatement);
-                while (resultSet.next()) {
-                    ProjectPrice projectPrice = new ProjectPrice();
-                    projectPrice.setProjectId(resultSet.getLong("project_id"));
-                    projectPrice.setProjectPrice(resultSet.getLong("project_price"));
-                    projectPrices.add(projectPrice);
+                try (ResultSet resultSet = statement.executeQuery(sqlStatement)) {
+                    while (resultSet.next()) {
+                        ProjectPrice projectPrice = new ProjectPrice();
+                        projectPrice.setProjectId(resultSet.getLong("project_id"));
+                        projectPrice.setProjectPrice(resultSet.getLong("project_price"));
+                        projectPrices.add(projectPrice);
+                    }
                 }
             }
         } catch (SQLException e) {
