@@ -3,10 +3,7 @@ package org.example.db.services;
 import org.example.db.entity.Client;
 import org.example.db.utils.Database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,15 +13,13 @@ public class ClientService {
     private final PreparedStatement setNameSt;
     private final PreparedStatement deleteByIdSt;
     private final PreparedStatement listAllSt;
-    private final PreparedStatement getLastInsertIdSt;
 
     public ClientService(Connection connection) throws SQLException {
-        createSt = connection.prepareStatement("INSERT INTO clients (client_name) VALUES (?)");
+        createSt = connection.prepareStatement("INSERT INTO clients (client_name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
         getByIdSt = connection.prepareStatement("SELECT client_name FROM clients WHERE client_id = ?");
         setNameSt = connection.prepareStatement("UPDATE clients SET client_name = ? WHERE client_id = ?");
         deleteByIdSt = connection.prepareStatement("DELETE FROM clients WHERE client_id = ?");
         listAllSt = connection.prepareStatement("SELECT client_id, client_name FROM clients");
-        getLastInsertIdSt = connection.prepareStatement("SELECT last_insert_id()");
     }
 
     public long create(String name) throws SQLException {
@@ -36,11 +31,11 @@ public class ClientService {
             throw new IllegalArgumentException("Client name is too short");
         }
 
-        ResultSet resultSet = getLastInsertIdSt.executeQuery();
+        ResultSet resultSet = createSt.getGeneratedKeys();
         if (!resultSet.next()) {
             return -1;
         }
-        return resultSet.getLong("last_insert_id()");
+        return resultSet.getLong(1);
     }
 
     public String getById(long id) throws SQLException {
